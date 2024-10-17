@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize, Transaction } = require('sequelize');
 
 const sequelize = new Sequelize('postgres_db', 'user', 'password', {
     host: 'localhost',
@@ -29,7 +29,9 @@ const createTable = async () => {
 // }
 
 const transactionExample = async () => {
-    const transaction = await sequelize.transaction();
+    const transaction = await sequelize.transaction({
+        isolationLevel: Transaction.ISOLATION_LEVELS.REPEATABLE_READ
+    });
 
     try {
         await sequelize.query(`
